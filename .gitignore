@@ -15,3 +15,6 @@ disabled-addons/
 *.bak
 __pycache__/
 *.pyc
+
+# Local Russian notes, not published
+README.ru.md

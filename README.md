@@ -1,7 +1,5 @@
 # Ghost Master: Resurrection — DLSS SR + Frame Generation (ReShade add-on)
 
-> Русская версия: [README.ru.md](README.ru.md)
-
 A C++/DirectX 12 ReShade add-on for Ghost Master: Resurrection (UE 5.5.1, Steam app 3289090, build 25511106, executable SHA256 `0e5e8471808be706d119f37da90c84ecf291c9e91613e5a5f4e9bd4caa8ae4e9`). It replaces the game's temporal upscaling pass (TAAU) with NVIDIA DLSS Super Resolution and adds DLSS Frame Generation 2x through NVIDIA Streamline. No game source code is needed.
 
 **Status: release 1.0.0, verified in game.** Download it from [Releases](https://github.com/DespairArdor/Ghost-Master-DLSS/releases/tag/v1.0.0). The full development log with evidence is in `PROGRESS.md`; a short start-here summary for development sessions is in `CLAUDE.md`.
