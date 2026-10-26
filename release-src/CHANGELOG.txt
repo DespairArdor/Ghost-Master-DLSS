@@ -1,0 +1,10 @@
+Ghost Master DLSS - changelog
+
+1.0.0
+- First release.
+- DLSS Super Resolution replacing the game's TAAU pass (Steam build 25511106).
+- DLSS Frame Generation 2x through NVIDIA Streamline 2.14.16.
+- ReShade overlay tab "DLSS SR": DLSS on/off, render resolution presets and slider, DLSS model preset,
+  Frame Generation switch, live status.
+- Render resolution changes apply immediately and from the first frame of each launch.
+- Ships NVIDIA DLSS 310.9.16 (Super Resolution and Frame Generation) runtime files.

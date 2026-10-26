@@ -1,0 +1,39 @@
+Поля для страницы мода на Nexus Mods (копировать как есть)
+===========================================================
+
+Mod name:
+Ghost Master DLSS - Super Resolution and Frame Generation
+
+Version:
+1.0.0
+
+Summary (до 350 символов):
+Adds NVIDIA DLSS Super Resolution and DLSS Frame Generation (2x) to Ghost Master: Resurrection through a ReShade add-on. In-game settings tab for render resolution, DLSS preset and Frame Generation. Requires ReShade with full add-on support and an RTX GPU (Frame Generation: RTX 40/50).
+
+Category:
+Visuals and Graphics  (или Utilities, если такой категории нет)
+
+Main file:
+GhostMasterDLSS-1.0.0.zip
+  File name on Nexus: Ghost Master DLSS
+  File version: 1.0.0
+  File category: Main files
+  File description: DLSS Super Resolution + Frame Generation add-on. Extract into the game folder. Requires ReShade 6.8+ with full add-on support.
+
+Requirements (Nexus "Requirements" section, off-site):
+- ReShade with full add-on support - https://reshade.me
+- Microsoft Visual C++ Redistributable 2015-2022 x64 - https://aka.ms/vs/17/release/vc_redist.x64.exe
+
+Description:
+nexus/description.bbcode (английский, BBCode). Русский текст есть в README.txt внутри архива.
+
+Tags (подходящие): Visuals, ReShade, Performance, DLSS
+
+Permissions — решить самостоятельно. В архиве лежат файлы NVIDIA (nvngx_dlss.dll, nvngx_dlssg.dll,
+sl.*.dll), они распространяются по лицензиям NVIDIA (тексты в streamline\), их нельзя перелицензировать.
+Для собственных файлов мода (ghostmaster_dlss.addon64, ghostmaster_fg.dll) разрешения выбираете вы.
+
+Перед загрузкой проверьте:
+- архив открывается и внутри путь GhostMasterRemake\Binaries\Win64\...;
+- SHA256 файлов совпадает с SHA256SUMS.txt;
+- версия игры в описании всё ещё актуальна (Steam build 25511106).

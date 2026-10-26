@@ -1,0 +1,38 @@
+// Version resource shared by the release binaries; the target's own defines pick the strings.
+#include <winver.h>
+#if defined(GM_FG_EXPORTS)
+#define GM_FILE_DESCRIPTION "Ghost Master DLSS frame generation helper"
+#define GM_ORIGINAL_FILENAME "ghostmaster_fg.dll"
+#else
+#define GM_FILE_DESCRIPTION "Ghost Master DLSS ReShade add-on"
+#define GM_ORIGINAL_FILENAME "ghostmaster_dlss.addon64"
+#endif
+#define GM_VERSION 1,0,0,0
+#define GM_VERSION_STRING "1.0.0"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION GM_VERSION
+PRODUCTVERSION GM_VERSION
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+FILEFLAGS 0
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_DLL
+FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "FileDescription", GM_FILE_DESCRIPTION
+            VALUE "FileVersion", GM_VERSION_STRING
+            VALUE "InternalName", GM_ORIGINAL_FILENAME
+            VALUE "OriginalFilename", GM_ORIGINAL_FILENAME
+            VALUE "ProductName", "Ghost Master DLSS"
+            VALUE "ProductVersion", GM_VERSION_STRING
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

@@ -1,0 +1,53 @@
+[size=5][b]Ghost Master DLSS[/b][/size]
+[b]NVIDIA DLSS Super Resolution + DLSS Frame Generation for Ghost Master: Resurrection[/b]
+
+The game ships without DLSS. This ReShade add-on replaces the game's own temporal upscaler (TAAU) with [b]DLSS Super Resolution[/b] and adds [b]DLSS Frame Generation[/b] (2x) through NVIDIA Streamline.
+
+[size=4][b]Features[/b][/size]
+[list]
+[*]DLSS Super Resolution in place of the game's TAAU
+[*]DLSS Frame Generation 2x (RTX 40 / 50 series)
+[*]In-game settings tab in the ReShade overlay (Home key): DLSS on/off, render resolution (Quality / Balanced / Performance / Ultra Performance or 33-99 %), DLSS model preset, Frame Generation on/off, live status
+[*]Render resolution changes apply instantly and from the first frame of every launch
+[*]Hotkeys: F6 DLSS on/off, F7 status line
+[/list]
+
+[size=4][b]Performance example[/b][/size]
+RTX 4090, 4K output, 58 % render scale, in a level: ~105-115 FPS without Frame Generation, ~175-210 FPS shown with Frame Generation.
+
+[size=4][b]Requirements[/b][/size]
+[list]
+[*]Ghost Master: Resurrection, [b]Steam build 25511106[/b] (DirectX 12)
+[*]NVIDIA RTX GPU - DLSS SR: RTX 20 or newer; Frame Generation: RTX 40 / 50 only
+[*]Windows 10/11; for Frame Generation enable "Hardware-accelerated GPU scheduling"
+[*][url=https://reshade.me]ReShade[/url] 6.8.0 or newer [b]with full add-on support[/b]
+[*]Microsoft Visual C++ 2015-2022 Redistributable (x64) - normally already installed with the game
+[/list]
+
+[size=4][b]Installation[/b][/size]
+[list=1]
+[*]Install ReShade [b]with full add-on support[/b] for [i]GhostMasterRemake\Binaries\Win64\GhostMasterRemake-Win64-Shipping.exe[/i] (DirectX 10/11/12, no effects needed).
+[*]Extract the archive into the game folder (the one containing [i]GhostMasterRemake[/i]). The files go to [i]GhostMasterRemake\Binaries\Win64[/i].
+[*]Start the game, press [b]Home[/b], open the [b]DLSS SR[/b] tab.
+[/list]
+Remove other upscaling / frame generation mods for this game first (OptiScaler, DLSS 5 / RenoDX DLSS add-ons, other Streamline injectors).
+
+[size=4][b]Notes[/b][/size]
+[list]
+[*]Frame Generation runs only while DLSS is active and the game window is focused.
+[*]A forced V-Sync in the NVIDIA Control Panel caps the shown FPS at your refresh rate.
+[*]Tied to the current game build. After a game update the add-on keeps the game's own TAAU until it is updated.
+[*]Tested on RTX 4090 only. HDR and other GPU generations are untested - reports welcome (attach the logs from [i]Win64\ghostmaster-dlss[/i]).
+[*]100 % (DLAA) is not offered: at 100 % the game uses a different anti-aliasing pass.
+[/list]
+
+[size=4][b]Uninstall[/b][/size]
+Delete [i]ghostmaster_dlss.addon64[/i], [i]ghostmaster_fg.dll[/i], [i]ghostmaster_dlss.ini[/i] and the folders [i]streamline[/i] and [i]ghostmaster-dlss[/i] from [i]GhostMasterRemake\Binaries\Win64[/i].
+
+[size=4][b]Credits[/b][/size]
+[list]
+[*]NVIDIA DLSS and Streamline - redistributed under the NVIDIA RTX SDK license and the MIT license (texts included)
+[*]crosire - ReShade and its add-on API (not included)
+[*]Dear ImGui - MIT
+[/list]
+This mod is not made, endorsed or supported by NVIDIA or by the developers/publishers of the game. NVIDIA, RTX and DLSS are trademarks of NVIDIA Corporation.

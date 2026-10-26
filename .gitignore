@@ -1,0 +1,17 @@
+# Build output
+build/
+release/
+
+# Third-party SDKs (see README "Зависимости для сборки")
+external/
+
+# Local data: game shader/constant dumps, logs, user configuration, other mods
+captures/
+reports/
+backups/
+run/
+disabled-addons/
+
+*.bak
+__pycache__/
+*.pyc
