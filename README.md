@@ -1,90 +1,94 @@
 # Ghost Master: Resurrection — DLSS SR + Frame Generation (ReShade add-on)
 
-C++/DirectX 12 аддон ReShade для Ghost Master: Resurrection (UE 5.5.1, Steam app 3289090, build 25511106, exe SHA256 `0e5e8471808be706d119f37da90c84ecf291c9e91613e5a5f4e9bd4caa8ae4e9`). Подменяет временной проход TAAU игры результатом NVIDIA DLSS Super Resolution и добавляет DLSS Frame Generation 2x через NVIDIA Streamline. Исходники игры не нужны.
+> Русская версия: [README.ru.md](README.ru.md)
 
-**Состояние (2026-10-26): релиз 1.0.0 собран и проверен в игре**, готов к загрузке на Nexus Mods (`release\GhostMasterDLSS-1.0.0.zip`). Подробная история с доказательствами — `PROGRESS.md`; краткая точка входа для новой сессии — `CLAUDE.md`.
+A C++/DirectX 12 ReShade add-on for Ghost Master: Resurrection (UE 5.5.1, Steam app 3289090, build 25511106, executable SHA256 `0e5e8471808be706d119f37da90c84ecf291c9e91613e5a5f4e9bd4caa8ae4e9`). It replaces the game's temporal upscaling pass (TAAU) with NVIDIA DLSS Super Resolution and adds DLSS Frame Generation 2x through NVIDIA Streamline. No game source code is needed.
 
-## Что проверено в игре (RTX 4090, вывод 4K)
+**Status: release 1.0.0, verified in game.** Download it from [Releases](https://github.com/DespairArdor/Ghost-Master-DLSS/releases/tag/v1.0.0). The full development log with evidence is in `PROGRESS.md`; a short start-here summary for development sessions is in `CLAUDE.md`.
 
-- DLSS SR вместо TAAU: тысячи кадров замены, нормальная картинка и UI (подтверждено пользователем).
-- Смена разрешения и масштаба на лету: DLSS пересоздаётся под новый размер без перезапуска.
-- Процент рендера из меню аддона: применяется сразу и с первого кадра запуска (запись `r.ScreenPercentage`).
-- DLSS Frame Generation: 2 выведенных кадра на 1 отрисованный; на уровне ~175–210 FPS на экране против ~105–115 без генерации; артефактов UI не замечено (пользователь).
-- Нагрузка аддона на CPU ~2–3 мс/кадр суммарно по потокам (было ~118 мс до переписывания отслеживания дескрипторов).
-- Релизная сборка 1.0.0 из архива: аддон «Ghost Master DLSS» v1.0.0.0, DLSS и FG работают, чистое завершение.
+## Verified in game (RTX 4090, 4K output)
 
-## Установка в игру
+- DLSS SR in place of TAAU: thousands of replaced frames, correct image and UI (confirmed by playing).
+- Resolution and render-scale changes are handled live: DLSS is recreated for the new size without a restart.
+- The add-on's render-scale setting applies immediately and from the first frame of every launch (it writes `r.ScreenPercentage`).
+- DLSS Frame Generation: 2 presented frames per rendered frame; in a level ~175-210 FPS shown vs ~105-115 without it; no UI artifacts noticed.
+- Add-on CPU cost ~2-3 ms per frame summed over render threads (down from ~118 ms before descriptor tracking was made lock-free).
+- The packaged 1.0.0 release: loads as "Ghost Master DLSS" v1.0.0.0, DLSS and Frame Generation work, clean exit.
 
-Пользователям — архив релиза (см. `release-src\README.txt`, он же лежит в архиве). Из этой рабочей папки, при закрытой игре:
+## Installation
+
+Players: use the release archive, see `release-src/README.txt` (the same file ships in the archive). In short: install ReShade 6.8+ **with full add-on support** for the game, extract the archive into the game folder, press Home in game and open the **DLSS SR** tab.
+
+From this working folder, with the game closed:
 
 ```powershell
-.\tools\install-addon.ps1      # аддон, ghostmaster_fg.dll, ini (если ещё нет) и подписанный рантайм NVIDIA в Win64\streamline
-.\tools\uninstall-addon.ps1    # удаляет аддон, ghostmaster_fg.dll и папку streamline (-RemoveSettings — ещё ini и логи)
+.\tools\install-addon.ps1      # add-on, ghostmaster_fg.dll, ini (if missing) and the signed NVIDIA runtime in Win64\streamline
+.\tools\uninstall-addon.ps1    # removes the add-on, ghostmaster_fg.dll and the streamline folder (-RemoveSettings also removes ini and logs)
 ```
 
-Установщик проверяет хеш exe, наличие ReShade (`dxgi.dll`), подписи NVIDIA и сохраняет конфигурацию папки игры и список файлов с SHA256 в `backups\before-install-*`. Нужен ReShade 6.8+ с полной поддержкой аддонов (у пользователя установлен 6.8.0, API 20).
+The installer checks the executable hash, ReShade (`dxgi.dll`) and NVIDIA signatures, and backs up the game folder configuration plus a SHA256 file list to `backups\before-install-*`.
 
-Аддоны DLSS 5 (`dlss5-feed`, `renodx-dlss5`) убраны из игры по просьбе пользователя в `disabled-addons\dlss5\`.
+## Menu and controls
 
-## Меню и управление
+Home → **DLSS SR** tab (the same panel is also under the add-on's entry in the Add-ons tab):
 
-Home → вкладка **DLSS SR** (та же панель есть под записью аддона во вкладке Add-ons):
+- DLSS on/off (F6), status line (F7, saved);
+- render resolution: "Game slider" (the game's Resolution Quality) or "Set here" — Quality 66.7 / Balanced 58 / Performance 50 / Ultra Performance 33.3 % and a 33.3-99 % slider;
+- Frame Generation on/off and status;
+- DLSS model preset (default, J, K, L, M), applied immediately;
+- current input/output size and FPS.
 
-- DLSS вкл/выкл (F6), строка статуса (F7, сохраняется);
-- разрешение рендера: «Game slider» (ползунок Resolution Quality игры) или «Set here» — Quality 66.7 / Balanced 58 / Performance 50 / Ultra Performance 33.3 % и ползунок 33.3–99 %;
-- генерация кадров вкл/выкл и статус;
-- пресет модели DLSS (default, J, K, L, M), применяется сразу;
-- текущие размеры входа/выхода и FPS.
+Settings file `ghostmaster_dlss.ini` (next to the add-on): `Mode` (replace/off/shadow), `ShowStatus`, `Preset`, `ScaleSource` (addon/game), `ScreenPercentage`, `FrameGeneration` (0 = Streamline is not loaded at all), `Diagnostics` (shader dumps and dispatch capture, default 0), `RuntimeDir`, `StreamlineDir`, `LogDir` (empty = defaults; relative paths are relative to the add-on folder). DLSS SR and Frame Generation share one signed `nvngx_dlss.dll` 310.9.16 in `Win64\streamline` — the game itself does not ship `nvngx_dlss.dll`.
 
-Настройки `ghostmaster_dlss.ini` (рядом с аддоном): `Mode` (replace/off/shadow), `ShowStatus`, `Preset`, `ScaleSource` (addon/game), `ScreenPercentage`, `FrameGeneration` (0 — Streamline вообще не грузится), `Diagnostics` (дампы шейдеров и захват команд, по умолчанию 0), `RuntimeDir`, `StreamlineDir`, `LogDir` (пусто — по умолчанию; относительные пути считаются от папки аддона). DLSS SR и FG используют один подписанный `nvngx_dlss.dll` 310.9.16 из `Win64\streamline` — в чистой игре своего `nvngx_dlss.dll` нет.
+Logs: `Win64\ghostmaster-dlss\capture.jsonl` (events; every 2 s a `perf` event with FPS and `fg_*` fields), `ghostmaster-dlss\streamline\frame_generation.jsonl`, `ghostmaster-dlss\streamline\sl.log`.
 
-Логи: `Win64\ghostmaster-dlss\capture.jsonl` (события, раз в 2 с `perf` с FPS и полями `fg_*`), `ghostmaster-dlss\streamline\frame_generation.jsonl`, `ghostmaster-dlss\streamline\sl.log`.
+## How it works (short)
 
-## Как это устроено (кратко)
-
-- `src/probe.cpp` — аддон ReShade: отслеживание дескрипторов без блокировок, перехват двух точных хешей шейдера TAAU (`fc434178cfb8e489`, `0f1634b465b59707`), чтение констант, меню, `r.ScreenPercentage`, связь с FG.
-- `src/live_bridge.cpp` — подготовка входов (цвет, глубина, векторы движения), вызов DLSS, копирование результата в выход TAAU, восстановление состояния command list, смена разрешения.
+- `src/probe.cpp` — the ReShade add-on: lock-free descriptor tracking, interception of two exact TAAU shader hashes (`fc434178cfb8e489`, `0f1634b465b59707`), constant reads, menu, `r.ScreenPercentage` control, Frame Generation hookup.
+- `src/live_bridge.cpp` — input preparation (color, depth, motion vectors), DLSS evaluation, copy into the TAAU output, command-list state restore, resolution changes.
 - `src/dlss_backend.cpp` — NGX DLSS SR.
-- `src/frame_generation.cpp` → `ghostmaster_fg.dll` — Streamline в режиме manual hooking: перехват слота vtable настоящей `IDXGIFactory2::CreateSwapChainForHwnd`, цепочка игра → ReShade → прокси Streamline → DXGI; DLL закрепляется в памяти, потому что ReShade выгружает аддоны между пробными устройствами.
-- Ключевые адреса и раскладки (`r.ScreenPercentage`, буфер `View` UE) — в `PROGRESS.md` и комментариях `probe.cpp`.
+- `src/frame_generation.cpp` → `ghostmaster_fg.dll` — Streamline in manual-hooking mode: the real `IDXGIFactory2::CreateSwapChainForHwnd` v-table slot is redirected so the chain is game → ReShade → Streamline proxy → DXGI. The DLL pins itself because ReShade unloads add-ons between the game's probe devices.
+- Key addresses and layouts (`r.ScreenPercentage`, the UE `View` buffer) are documented in `PROGRESS.md` and in comments in `probe.cpp`.
 
-## Тестовый лаунчер (без установки в игру)
+## Test launcher (without installing into the game)
 
-`Start-DLSS.cmd` / `tools\launch-live.ps1` запускают игру с изолированным профилем ReShade в `run\` (только наш аддон, Streamline из `external\Streamline\bin\x64`), процент рендера задаётся через `run\addons\ghostmaster_dlss.ini`. `Start-Baseline.cmd` — тот же запуск, но аддон только измеряет FPS (для сравнения). Флаги лаунчера: `-Mode`, `-ScreenPercentage`, `-Width/-Height`, `-Fullscreen`, `-Diagnostics`, `-Baseline`. Капчуры — `captures\live-*`.
+`Start-DLSS.cmd` / `tools\launch-live.ps1` start the game with an isolated ReShade profile in `run\` (only this add-on, Streamline from `external\Streamline\bin\x64`); the render scale is passed through `run\addons\ghostmaster_dlss.ini`. `Start-Baseline.cmd` is the same launch with the add-on only measuring FPS (for comparisons). Launcher options: `-Mode`, `-ScreenPercentage`, `-Width/-Height`, `-Fullscreen`, `-Diagnostics`, `-Baseline`. Captures go to `captures\live-*`.
 
-## Сборка, тесты, релиз
+## Building, tests, release
 
-Требуются VS 2022 Build Tools (C++), Windows SDK, CMake (из VS) и зависимости в `external\` (в репозиторий не входят):
+Requires VS 2022 Build Tools (C++), the Windows SDK, CMake (from VS) and these dependencies in `external\` (not part of the repository):
 
-| Папка | Откуда |
+| Folder | Source |
 |---|---|
-| `external\reshade` | `git clone https://github.com/crosire/reshade` на commit `7bf9de8b33bcc76c3177007e65d73c72dd0f34c0` (нужны `include` и `deps\imgui`) |
+| `external\reshade` | `git clone https://github.com/crosire/reshade`, commit `7bf9de8b33bcc76c3177007e65d73c72dd0f34c0` (needs `include` and `deps\imgui`) |
 | `external\DLSS` | [NVIDIA/DLSS](https://github.com/NVIDIA/DLSS) v310.9.16 (`include`, `lib\Windows_x86_64`, `LICENSE.txt`) |
-| `external\Streamline` | `streamline-sdk-v2.14.16.zip` из [релизов NVIDIA-RTX/Streamline](https://github.com/NVIDIA-RTX/Streamline/releases/tag/v2.14.16), распакованный (`include`, `bin\x64`, `license.txt`) |
+| `external\Streamline` | `streamline-sdk-v2.14.16.zip` from the [NVIDIA-RTX/Streamline releases](https://github.com/NVIDIA-RTX/Streamline/releases/tag/v2.14.16), extracted (`include`, `bin\x64`, `license.txt`) |
 
 ```powershell
 .\tools\build.ps1
-.\build\RelWithDebInfo\bridge_smoke.exe .\external\DLSS\lib\Windows_x86_64\rel .\reports\bridge-smoke   # DLSS-мост со сменой разрешения
-.\build\RelWithDebInfo\sl_smoke.exe .\external\Streamline\bin\x64 .\reports\sl-smoke                     # DLSS-G через модуль FG (откроет окно)
-.\tools\make-release.ps1                                                                                  # архив и тексты в release\
+.\build\RelWithDebInfo\bridge_smoke.exe .\external\DLSS\lib\Windows_x86_64\rel .\reports\bridge-smoke   # DLSS bridge incl. a resolution change
+.\build\RelWithDebInfo\sl_smoke.exe .\external\Streamline\bin\x64 .\reports\sl-smoke                     # DLSS-G through the FG module (opens a window)
+.\tools\make-release.ps1                                                                                  # archive and texts in release\
 ```
 
-NGX/Streamline-тесты нужно запускать без песочницы (в песочнице NVIDIA Telemetry зависает при завершении). `sl_smoke` нужно окно в фокусе — DLSS-G не работает в окне без фокуса. Версия релиза — `src\version.rc`; тексты и ini релиза — `release-src\`; `make-release.ps1` проверяет совпадение версии и подписи NVIDIA и пишет `release\SHA256SUMS.txt`.
+Run the NGX/Streamline tests outside a sandbox (NVIDIA telemetry hangs on exit inside one). `sl_smoke` needs its window focused — DLSS-G does not interpolate an unfocused window. The release version lives in `src\version.rc`; release texts and ini in `release-src\`; `make-release.ps1` checks the version and NVIDIA signatures and writes `release\SHA256SUMS.txt`.
 
-## Ограничения
+## Limitations
 
-- Привязан к одной сборке игры; после обновления игры аддон не найдёт проход TAAU и DLSS станет неактивным.
-- Только два исследованных шейдера TAAU; другой метод сглаживания в настройках игры может выбрать иной вариант.
-- 100 % (DLAA) не предлагается — игра тогда использует другой проход сглаживания.
-- Проверено только на RTX 4090; HDR, мультимонитор, другие поколения GPU не проверены.
-- Генерация кадров работает только при активном DLSS и окне в фокусе; при выключении DLSS через F6 в `sl.log` появляются ошибки «Failed to find global tag» (безвредно).
-- В панели NVIDIA у пользователя глобально принудительно включён VSync — выводимый FPS ограничен частотой монитора; игровой лимит `MaxFPS` (Settings.sav) ограничивает только отрисованные кадры.
+- Tied to one game build; after a game update the add-on finds no TAAU pass and DLSS stays inactive.
+- Only the two studied TAAU shader variants; a different anti-aliasing method in the game settings can select another variant.
+- 100 % (DLAA) is not offered — the game then uses a different anti-aliasing pass.
+- Tested on an RTX 4090 only; HDR, multi-monitor and other GPU generations are untested.
+- Frame Generation works only while DLSS is active and the window is focused; toggling DLSS off with F6 logs harmless "Failed to find global tag" errors in `sl.log`.
+- A V-Sync forced in the NVIDIA Control Panel caps the shown FPS at the refresh rate; the game's own `MaxFPS` limit (Settings.sav) only limits rendered frames.
 
-## Зависимости и лицензии
+## Dependencies and licenses
 
-- [ReShade](https://github.com/crosire/reshade), commit `7bf9de8b33bcc76c3177007e65d73c72dd0f34c0` (заголовки API и ImGui); в релиз не входит.
-- [NVIDIA DLSS SDK](https://github.com/NVIDIA/DLSS) 310.9.16, commit `9981c6350dc58c0ce21f024fd65e31e851c31689`; лицензия NVIDIA RTX SDK (`external\DLSS\LICENSE.txt`), разрешает распространение рантайма в составе приложения с уведомлением.
+- [ReShade](https://github.com/crosire/reshade), commit `7bf9de8b33bcc76c3177007e65d73c72dd0f34c0` (API headers and ImGui); not included in the release.
+- [NVIDIA DLSS SDK](https://github.com/NVIDIA/DLSS) 310.9.16, commit `9981c6350dc58c0ce21f024fd65e31e851c31689`; NVIDIA RTX SDK license (`external\DLSS\LICENSE.txt`), which allows redistributing the runtime as part of an application with the required notice.
 - [NVIDIA Streamline](https://github.com/NVIDIA-RTX/Streamline) 2.14.16 (zip SHA256 `32041e51db0cab709a271b72a352281b690c2abbd669a827809401a5dd23956b`); MIT.
 - [Dear ImGui](https://github.com/ocornut/imgui), commit `3912b3d9a9c1b3f17431aebafd86d2f40ee6e59c`; MIT.
 
-This software contains source code provided by NVIDIA Corporation.
+No license is granted for this repository's own code; all rights reserved by the author. NVIDIA files keep their own licenses.
+
+This software contains source code provided by NVIDIA Corporation. Not affiliated with or endorsed by NVIDIA or by the game's developers/publishers. NVIDIA, RTX and DLSS are trademarks of NVIDIA Corporation.

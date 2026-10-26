@@ -12,7 +12,7 @@ ReShade add-on adding NVIDIA DLSS Super Resolution and DLSS Frame Generation (2x
 - This folder ("C:\dev\GhostMaster-DLSS — копия") is the working copy and a git repo (public on GitHub, no license chosen by the
   user, GitHub Release v1.0.0 carries the release zip). `.gitignore` keeps out SDKs, game dumps (captures), logs, backups and
   other mods. The original `C:\dev\GhostMaster-DLSS` is older; work here.
-- Full evidence and history: `PROGRESS.md` (append new entries at the end). User-facing overview: `README.md`.
+- Full evidence and history: `PROGRESS.md` (append new entries at the end). User-facing overview: `README.md` (English, GitHub front page) and `README.ru.md` (Russian).
 
 ## Map
 - `src/probe.cpp` — the add-on: lock-free descriptor mirror, TAAU interception (shader hashes fc434178cfb8e489, 0f1634b465b59707),
